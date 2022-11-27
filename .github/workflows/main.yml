@@ -6,7 +6,7 @@ on:
     - 'releases/**'
 jobs:
   build:
-    runs-on: centos-lastest
+    runs-on: centos-latest
     steps:
      - name: Checkout Code
        uses: actions/checkout@v3
