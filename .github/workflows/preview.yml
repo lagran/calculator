@@ -1,9 +1,9 @@
 name: Build and Test
 on:
   push:
-    branches-ignore:
-    - main
-    - releases/**
+    # branches-ignore:
+    # - main
+    # - releases/**
     branches:
     - test
 jobs:
