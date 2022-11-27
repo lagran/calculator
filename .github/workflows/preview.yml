@@ -23,6 +23,8 @@ jobs:
     # 上传腾讯云
      - name: Deploy on Tencent Cloud
        uses: easingthemes/ssh-deploy@v2.1.1
+       with:
+         production-deploy: false
        env:
         # 私钥
         SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
