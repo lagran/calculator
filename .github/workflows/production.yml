@@ -16,14 +16,10 @@ jobs:
          node-version: "16.17.0"
      - name: Install Dependencies
        run: npm install
-#      - name: Run Linting Checks
-#        run: 
      - name: Build Application
        run: npm run build
-#      - name: Run Tests
-#        run: 
      - name: Deploy to Netlify
-       use: nwtgck/actions-netlify@v1.2
+       uses: nwtgck/actions-netlify@v1.2
        with:
          production-deploy: true
          production-branch: main
