@@ -2,11 +2,11 @@ name: Create Release
 on:
   push:
     branches:
-    - 'main'
-    - 'releases/**'
+    - main
+    # - 'releases/**'
 jobs:
   build:
-    runs-on: centos-latest
+    runs-on: ubuntu-latest
     steps:
      - name: Checkout Code
        uses: actions/checkout@v3
