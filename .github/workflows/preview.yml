@@ -1,0 +1,38 @@
+name: Create Release
+on:
+  push:
+    branches-ignore:
+    - main
+    - releases/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout Code
+       uses: actions/checkout@v3
+     - name: Set Node Version
+       uses: actions/setup-node@v3
+       with:
+         node-version: "16.17.0"
+     - name: Install Dependencies
+       run: npm install
+#      - name: Run Linting Checks
+#        run: 
+     - name: Build Application
+       run: npm run build
+#      - name: Run Tests
+#        run: 
+     - name: Deploy to Netlify
+       use: nwtgck/actions-netlify@v1.2
+       with:
+         production-deploy: false
+         production-branch: main
+         publish-dir: "./build"
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         deploy-message: "Deploy from Github Actions"
+         enable-pull-request-comment: true
+         enable-commit-comment: true
+         overwrities-pull-request-comment: true
+       env:
+         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
