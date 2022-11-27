@@ -3,7 +3,6 @@
     <div class="result" style="grid-area: result">
       {{ equation }}
     </div>
-
     <button style="grid-area: ac" @click="clear">AC</button>
     <button style="grid-area: plus-minus" @click="calculateToggle">±</button>
     <button style="grid-area: percent" @click="calculatePercentage">%</button>
@@ -31,9 +30,9 @@
 <script setup>
 import { ref } from "vue"
 
-const isDecimalAdded = false;
-const isOperatorAdded = false;
-const isStarted = false;
+let isDecimalAdded = false;
+let isOperatorAdded = false;
+let isStarted = false;
 const equation = ref('0');
 
 // Check if the character is + / - / × / ÷
@@ -44,39 +43,39 @@ function isOperator(character) {
 // When pressed Operators or Numbers
 function append(character) {
     // Start
-    if (equation.value === '0' && !this.isOperator(character)) {
+    if (equation.value === '0' && !isOperator(character)) {
     if (character === '.') {
         equation.value += '' + character
-        this.isDecimalAdded = true
+        isDecimalAdded = true
     } else {
         equation.value = '' + character
     }
     
-    this.isStarted = true
+    isStarted = true
     return
     }
     
     // If Number
-    if (!this.isOperator(character)) {
-    if (character === '.' && this.isDecimalAdded) {
+    if (!isOperator(character)) {
+    if (character === '.' && isDecimalAdded) {
         return
     }
     
     if (character === '.') {
-        this.isDecimalAdded = true
-        this.isOperatorAdded = true
+        isDecimalAdded = true
+        isOperatorAdded = true
     } else {
-        this.isOperatorAdded = false
+        isOperatorAdded = false
     }
     
     equation.value += '' + character
     }
     
     // Added Operator
-    if (this.isOperator(character) && !this.isOperatorAdded) {
+    if (isOperator(character) && !isOperatorAdded) {
     equation.value += '' + character
-    this.isDecimalAdded = false
-    this.isOperatorAdded = true
+    isDecimalAdded = false
+    isOperatorAdded = true
     }
 }
 
@@ -85,36 +84,36 @@ function calculate() {
     let result = equation.value.replace(new RegExp('×', 'g'), '*').replace(new RegExp('÷', 'g'), '/')
     
     equation.value = parseFloat(eval(result).toFixed(9)).toString()
-    this.isDecimalAdded = false
-    this.isOperatorAdded = false
+    isDecimalAdded = false
+    isOperatorAdded = false
 }
 
 // When pressed '+/-'
 function calculateToggle() {
-    if (this.isOperatorAdded || !this.isStarted) {
+    if (isOperatorAdded || !isStarted) {
     return
     }
     
     equation.value = equation.value + '* -1'
-    this.calculate()
+    calculate()
 }
 
 // When pressed '%'
 function calculatePercentage() {
-    if (this.isOperatorAdded || !this.isStarted) {
+    if (isOperatorAdded || !isStarted) {
     return
     }
     
     equation.value = equation.value + '* 0.01'
-    this.calculate()
+    calculate()
 }
 
 // When pressed 'AC'
 function clear() {
     equation.value = '0'
-    this.isDecimalAdded = false
-    this.isOperatorAdded = false
-    this.isStarted = false
+    isDecimalAdded = false
+    isOperatorAdded = false
+    isStarted = false
 }
 
 </script>
