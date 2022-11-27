@@ -1,9 +1,11 @@
 name: Build and Test
 on:
   push:
-    branches-ignore:
-    - main
-    - releases/**
+    # branches-ignore:
+    # - main
+    # - releases/**
+    branches:
+    - test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,21 +20,36 @@ jobs:
        run: npm install
      - name: Build Application
        run: npm run build
-     - name: Deploy to Netlify
-       uses: nwtgck/actions-netlify@v1.2
-       with:
-         production-deploy: false
-         production-branch: main
-         publish-dir: "./dist"
-         github-token: ${{ secrets.GITHUB_TOKEN }}
-         deploy-message: "Deploy from Github Actions"
-         enable-pull-request-comment: true
-         enable-commit-comment: true
-         overwrites-pull-request-comment: true
+    # 上传腾讯云
+     - name: Deploy on Tencent Cloud
+       uses: easingthemes/ssh-deploy@v2.1.1
        env:
-         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
+        # 私钥
+        SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        # scp参数
+        ARGS: '-avzr --delete'
+        # 源目录
+        SOURCE: 'dist'
+        # 服务器ip：换成你的服务器IP
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        # 用户
+        REMOTE_USER: 'root'
+        # 目标地址
+        TARGET: '/www/wwwroot'
+    #  - name: Deploy to Netlify
+    #    uses: nwtgck/actions-netlify@v1.2
+    #    with:
+    #      production-deploy: false
+    #      production-branch: main
+    #      publish-dir: "./dist"
+    #      github-token: ${{ secrets.GITHUB_TOKEN }}
+    #      deploy-message: "Deploy from Github Actions"
+    #      enable-pull-request-comment: true
+    #      enable-commit-comment: true
+    #      overwrites-pull-request-comment: true
+    #    env:
+    #      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+    #      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
 #      - name: Run Linting Checks
 #        run: 
